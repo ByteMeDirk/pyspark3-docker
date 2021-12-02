@@ -21,13 +21,29 @@ The docker image may assume local AWS configurations and secrets on run for spec
 docker run --rm=true -v ~/.aws:/root/.aws <etc...>
 ```
 
-This image can be extended to run any PySpark .py script using python3 or spark-submit.
+This image can be extended to run any PySpark .py script using `python3`.
 
+## Example
+Set up your local docker container that will run your scripts, 
+in our case it could be `scripts/main.py` and one could set up the data in `data/*`:
 ```docker
 FROM dirkscgm/pyspark3:latest
 
 WORKDIR /app
-COPY scripts/* scripts/
 
-ENTRYSCRIPT ["python3", "scripts/main.py"]
+COPY scripts/* scripts/
+COPY data/* data/
+
+ENTRYPOINT ["python3"]
+CMD ["scripts/main.py"]
+```
+
+Build the local image:
+```shell
+docker build -t pyspark3 .
+```
+
+Run the container with the CMD set to the main entrypoint of the spark application:
+```shell
+docker run --rm=true pyspark3
 ```

@@ -1,5 +1,5 @@
 from pyspark.context import SparkContext
-from pyspark.sql import SparkSession, DataFrame
+from pyspark.sql import SparkSession
 
 
 def main():
@@ -9,9 +9,7 @@ def main():
     sc: SparkSession = SparkContext.getOrCreate()
     spark: SparkSession = SparkSession(sc)
 
-    mock_data_values: list = [(4454, "Alex", 28), (8776, "Lee", 29)]
-    mock_data_columns: list = ["id", "name", "age"]
-    data_frame: DataFrame = spark.createDataFrame(mock_data_values, mock_data_columns)
+    data_frame = spark.read.json("./data/mock_data.json")
     data_frame.show()
 
 
